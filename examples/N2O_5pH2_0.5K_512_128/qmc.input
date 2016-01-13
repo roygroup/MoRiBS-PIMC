@@ -1,0 +1,58 @@
+#RESTART
+
+#-------   OPT or PIMC -------
+#OPT
+
+#-------   IO FILES --------
+
+MASTERDIR        ./
+OUTPUTDIR        ./results/
+FILENAMEPREFIX   gr
+
+#-------  SYSTEM -----------
+
+DIMENSION     3 
+# in the multicomponent system:  the total density for all atoms (molecules excluded)                    
+DENSITY       0.02      #  Angstrom^-3  Used to define the BoxLength
+TEMPERATURE   0.5        #  Kelvin
+
+# LIMITATION:  only one molecular impurity! 
+
+# [atom] [type] [N] [statistics] [step AA]  [# levels]  [pot]  [model of interaction]     
+
+#ATOM  H2   2   BOSE    0.15     4    buck   PRIMITIVE    #    
+#ATOM  He4  3   BOSE    0.15     4    helium   PRIMITIVE    #    
+# with buck and PRIMTIVE above, the potentional filename should be  buck.pot with values in Angstroms and Kelvin
+ATOM      H2  5   BOSE     0.14     3    parah2   PRIMITIVE     #    
+MOLECULE  N2O 1   BOLTZMANN    0.08  3   h2n2ogr    PRIMITIVE   #  
+# comment molecule above for pure clusters
+
+# molecules' descriptions should follow the atoms' ones
+
+# parameters for rotational degrees of freedom of molecules, one line per molecule
+#         [type]  [MC steps for orient df]  [Number of time slices for rotations]
+
+ROTATION   N2O    0.3   128
+
+# parameters for the worm algorithm (C is redefined) 
+#        [type]  [C]   [~m should be < NUMBEROFSLICES > 1]
+    
+WORM       H2    2.9  8 
+# atom type above is anticipating mixtures
+# without WORM, we use MLMMC
+
+#MINIMAGE                      # periodic boundary conditions
+
+#-------- MC PARAMETERS ----
+
+NUMBEROFSLICES     512            #  number of time slices
+
+NUMBEROFPASSES     5000           #  number of passes per block
+NUMBEROFBLOCKS     300 5      #  number of blocks and number of equil blocks
+
+# number of MC steps to skip (mc_setup)
+
+MCSKIP_RATIO     10000        # to save information regarding accept ratio
+MCSKIP_TOTAL     10000        # to save accumulated average
+MCSKIP_AVERG     5           # to evaluate averages
+#BLOCKSKIP_2D	 2	      # skipped blocks to save 2D densities

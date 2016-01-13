@@ -1,0 +1,4 @@
+# dynamic library path for quad precision
+export LD_LIBRARY_PATH=/home/pnroy/Dev/lib64
+#           T    P   iodevn ith0 ithend Arot Brot Crot  maxj
+./asymrho.x 0.37 128 -1 10 10 0.6666525 0.2306476 0.1769383 66

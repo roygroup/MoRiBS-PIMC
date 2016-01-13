@@ -1,0 +1,9 @@
+This program is written by Toby Zeng in Department of Chemistry, University of Waterloo. It has only one F77 source code file, linden.f and you can run make to compile it, generating the linden.x executable file. This code is used to generate a table of PIMC rotational propagator and energy estimator on a grid of values ranging from -1 to 1. The grid is for the relative orientation of the rotor between two adjacent imaginary time slices (beads). The original formulas are Eqs 2.39 and 2.40 of J. Phys.: Condens. Matter 11 (1999) R117-R155. The formulas in the code have been adapted to be used in our PIMC code. The command the run the executable is, e.g.,
+
+     linden.x 0.5 128 1.92253 1500 -1
+
+The arguments are simulation temperature in K (0.5), the number of rotational beads in simulation (128), rotational constant of the rotor in CM-1 (1.92253), the number of grid points of the relative orientation (1500), and a flag (0, 1, or -1) to indicate the type of rotor. 0 indicates a para-H2 type of rotor, 1 a ortho-H2 type, and -1 a rotor that does not have coupling between nuclear spin and rotation.
+
+Running the program will generate an output file of linden.out, in which the first column is the grid values of relative orientation, second the propagator, and third the energy estimator. You can feel free to use "#" at the beginning of lines to add comments on top (but only on top) of the data since the PIMC program will omit all those # lines.
+
+Given any question, please feel free to contact Toby Zeng (tzeng@ualberta.ca).
