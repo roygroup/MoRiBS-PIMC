@@ -154,8 +154,8 @@ c ... treating even k
         enddo
       endif
 
-c     call tql(maxd,ndimev,H,eigval,work)
-      call dsyev(chrjob,uplo,ndimev,H,maxd,eigval,awork,lwork,info)
+      call tql(maxd,ndimev,H,eigval,work)
+c     call dsyev(chrjob,uplo,ndimev,H,maxd,eigval,awork,lwork,info)
 
       if(j.le.2) then
         write(6,'(/3x,10f9.4)')(eigval(i),i=1,ndimev)
@@ -215,8 +215,8 @@ c ... treating odd k
         enddo
       endif
 
-c     call tql(maxd,ndimod,H,eigval,work)
-      call dsyev(chrjob,uplo,ndimod,H,maxd,eigval,awork,lwork,info)
+      call tql(maxd,ndimod,H,eigval,work)
+c     call dsyev(chrjob,uplo,ndimod,H,maxd,eigval,awork,lwork,info)
 
       if(j.le.2) then
         write(6,'(/3x,10f9.4)')(eigval(i),i=1,ndimod)

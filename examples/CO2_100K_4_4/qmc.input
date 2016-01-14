@@ -1,0 +1,67 @@
+#RESTART
+
+#-------   IO FILES --------
+
+MASTERDIR        ./
+OUTPUTDIR        ./g4/1/
+FILENAMEPREFIX   CO2_monomer
+
+#-------  SYSTEM -----------
+
+DIMENSION     3 
+# in the multicomponent system:  the total density for all atoms (molecules excluded)                    
+DENSITY       0.0450   #  Angstrom^-3  Used to define the BoxLength
+TEMPERATURE   100       #  Kelvin
+
+# LIMITATION:  only one molecular impurity! 
+
+# [atom] [type] [N] [statistics] [step AA]  [# levels]  [pot]  [model of interaction]     
+
+#ATOM       H2   2   BOSE          0.15     4         buck   PRIMITIVE    #    
+#ATOM       He4  1    BOSE          0.30     4         helium   PRIMITIVE    #    
+# with buck and PRIMTIVE above, the potentional filename should be  buck.pot with values in Angstroms and Kelvin
+#ATOM         He4    1   BOSE          0.25     5         helium037K256t    EFFECTIVE   #        
+#ATOM         H2    4   BOSE          0.45      4         isoH2H208         PRIMITIVE    #        
+#MOLECULE     CO    1   BOLTZMANN     0.18      3         COH2_04_R20_hind  PRIMITIVE    #  
+MOLECULE     CO2    1   BOLTZMANN     0.18      1         CO2_fake  PRIMITIVE    #  
+#NONLINEAR    H2O   1   BOLTZMANN      0.05     3         COH2_04_R20_hind  PRIMITIVE
+# comment molecule above for pure clusters
+
+# molecules' descriptions should follow the atoms' ones
+
+# parameters for rotational degrees of freedom of molecules, one line per molecule
+#         [type]  [MC steps for orient df]  [Number of time slices for rotations]
+
+ROTATION   CO2   0.15  4
+
+# parameters for rotational density selection: irho (0 Noya; 1 RS), iodevn (only needed for irho=1), energy offset (cm-1) (only needed for irho=1), three rotatinal constants in cm-1 along x- y- and z-axes in the molecular fixed frame, ratio between RS steps and Noya steps in hybrid energy evaluation
+ROTDENSI 0  -1 0.0 0.6666525 0.1769383 0.2306476 1
+
+# parameters for the worm algorithm (C is redefined) 
+#        [type]  [C]   [~m should be < NUMBEROFSLICES > 1]
+    
+#WORM       He4   0.14    16 #0.135 0.899
+# atom type above is anticipating mixtures
+# without WORM, we use MLMMC
+
+#READMCCOORDS
+
+#INITIALBLOCK 3511
+
+#REFLECTY 1
+
+#MINIMAGE                       # periodic boundary conditions
+
+#-------- MC PARAMETERS ----
+
+NUMBEROFSLICES      4       #  number of time slices
+
+NUMBEROFPASSES     3000         #  number of passes per block
+NUMBEROFBLOCKS     2000  500   #  number of blocks and number of equil blocks
+
+# number of MC steps to skip (mc_setup)
+
+MCSKIP_RATIO     500            # to save information regarding accept ratio
+MCSKIP_TOTAL     500             # to save accumulated average
+MCSKIP_AVERG     1                 # to evaluate averages
+ 
