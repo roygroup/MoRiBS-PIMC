@@ -3,14 +3,10 @@ ARFLAGS = cr
 #If your system does not have ranlib, then replace next statement with 
 #RANLIB = echo
 RANLIB = ranlib
-CC = /home/pnroy/Dev/bin/gcc
-#CC = /home/tzeng/intel/bin/icc
+CC = gcc
 CLD = $(CC)
-# Set f77 to echo if you do not have a FORTRAN compiler
-#F77 = ifort 
-F77 =  /home/pnroy/Dev/bin/gfortran 
-#F77= /home/tzeng/intel/bin/ifort
-#F77 = echo
+F77 =  gfortran 
+
 F77LD = $(F77)
 FFXN = -DAdd_
 FSUFFIX = F
