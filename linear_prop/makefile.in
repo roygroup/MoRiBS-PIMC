@@ -1,4 +1,4 @@
-FC=gfortran
+FC = @FC@
 
 linden.x:	linden.o
 		$(FC) -o $@ linden.o

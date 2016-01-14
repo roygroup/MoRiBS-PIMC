@@ -1,6 +1,5 @@
 
-#FC=ifort
-FC=~pnroy/Dev/bin/gfortran
+FC = @FC@
 
 #LDFLAGS=-L/opt/intel/mkl/lib/intel64 -llapack
 

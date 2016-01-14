@@ -1,8 +1,7 @@
 
-#FC=ifort
-FC=~pnroy/Dev/bin/gfortran
+FC = @FC@
 
-LDFLAGS=-L/opt/intel/mkl/lib/intel64 -llapack -L/home/pnroy/Dev/lib64/
+#LDFLAGS=-L/opt/intel/mkl/lib/intel64 -llapack -L/home/pnroy/Dev/lib64/
 
 asymrho.x:	asymrho.o
 		$(FC) -o $@ asymrho.o $(LDFLAGS)
