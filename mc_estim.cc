@@ -1,6 +1,6 @@
 // estimators for MC
 
-#include <math.h>
+#include <cmath>
 #include <iomanip>
 
 //#include <gsl/gsl_sf_legendre.h>

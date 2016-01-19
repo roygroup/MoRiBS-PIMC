@@ -6,7 +6,7 @@
 //#include <stdlib>
 #include <sstream>
 #include <iomanip>
-#include <math.h>
+#include <cmath>
 
 #include "mc_confg.h"
 #include "mc_setup.h"

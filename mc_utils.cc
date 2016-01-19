@@ -1,7 +1,7 @@
 #include "mc_utils.h"
 #include "mc_confg.h"
 
-#include <math.h>
+#include <cmath>
 #include <assert.h>
 #include <stdlib.h>
 

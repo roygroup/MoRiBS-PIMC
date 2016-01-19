@@ -13,7 +13,7 @@
 //#include <mpi.h>
 #include <omp.h>
 
-#include <math.h>
+#include <cmath>
 #include "rngstream.h"
 #include "omprng.h"
 

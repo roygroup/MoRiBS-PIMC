@@ -3,7 +3,7 @@
 #include "mc_confg.h"
 #include "mc_const.h"
 
-#include <math.h>
+#include <cmath>
 
 //------------- MC FLAGS ---------------------------------
 

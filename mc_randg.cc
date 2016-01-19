@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 #include <stdio.h>
 
 //Toby set SEED as 985456376 + rank to make different SEEDs for different CPUs

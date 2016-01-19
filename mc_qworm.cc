@@ -6,7 +6,7 @@
 #include "mc_piqmc.h"
 
 #include <stdlib.h>
-#include <math.h>
+#include <cmath>
 
 // TEST
 const int    MAXNEIGHBORS = 100;    // max number of atoms in the list of neighbors

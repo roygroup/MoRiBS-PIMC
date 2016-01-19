@@ -4,7 +4,7 @@
 #include "mc_utils.h"
 #include "mc_setup.h"
 
-#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 #include <string>
 #include <sstream>
