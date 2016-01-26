@@ -3,8 +3,6 @@
 options= -Ofast -march=native -fopenmp
 
 CFLAGS =-I./sprng/include -I/usr/local/include -DMOVECENTROIDTEST 
-
-LDFLAGS= -lm -L./sprng/lib -llcg -lgfortran
  
 #-------------------------------------------------------------------------
 #  Compilers
@@ -12,6 +10,15 @@ LDFLAGS= -lm -L./sprng/lib -llcg -lgfortran
 
 CC = @CXX@
 FC = @FC@
+
+LDFLAGS = -lm -L./sprng/lib -llcg
+
+ifeq ($(FC),gfortran)
+        LDFLAGS += -lgfortran
+endif
+ifeq ($(FC),ifort)
+        LDFLAGS += -lifcore
+endif
 
 #-------------------------------------------------------------------------
 # objects for QMC

@@ -3,7 +3,7 @@ AC_INIT([pimc], [1.0], [pnroy@uwaterloo.ca])
 
 # Checks for programs.
 AC_PROG_CXX
-AC_PROG_FC(gfortran)
+AC_PROG_FC
 
 # Checks for libraries.
 AC_CHECK_LIB([gomp], [main])
