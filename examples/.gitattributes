@@ -1,0 +1,7 @@
+*.rho filter=lfs diff=lfs merge=lfs -text
+*.esq filter=lfs diff=lfs merge=lfs -text
+*.eng filter=lfs diff=lfs merge=lfs -text
+MF_1He_0.37K_512_128/MFHe_09_AF.pot filter=lfs diff=lfs merge=lfs -text
+MF_8He_0.37K_512_128/MFHe_09_AF.pot filter=lfs diff=lfs merge=lfs -text
+SO2_1pH2_0.37K_1024_256/SO2_H2_AF09.pot filter=lfs diff=lfs merge=lfs -text
+SO2_4pH2_0.37K_1024_256/SO2_H2_AF09.pot filter=lfs diff=lfs merge=lfs -text
