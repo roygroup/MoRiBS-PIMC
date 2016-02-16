@@ -11,6 +11,16 @@ The program MoRiBS-PIMC is mainly written by Tao (Toby) Zeng, Nicholas Blinov, G
 					************************
 
 Users should not change the directory structure after they unzip the distributed file. We label the main directory, where the source codes (*.cc, *.h, and *.f) are, as $MAIN. Please note that we have provided example configuration files like makefile with the distribution and one may just adjust the files according to the architecture of his/her computer. There is no need to create new configuration files. The compilation procedure of MoRiBS-PIMC contains the following steps:
+	
+	*****************************************************************************************************************************
+	NOTE: If you clone this repository using Github, you will need to have Git Large File Storage (https://git-lfs.github.com/)
+		installed in order to download some of the larger files associated with the examples/ directory. Github only permits
+		versionning for files less than 100MB in size. If you have git-lfs installed, when you clone the repository, all of
+		the example files will download properly.
+		
+		For Ubuntu, you can download the appropriate binary from https://github.com/github/git-lfs/releases and install using
+		the install.sh file. Please refer to https://git-lfs.github.com/ for full details for various operating systems.
+	*****************************************************************************************************************************
 
 	1. Download and unpack the source code from the repository. This unpacked directory contains the source code and for future reference in this document,
 	   we will refer to this directory as $MAIN, where it is understood that $MAIN refers to the path of the directory (i.e. /home/user/MoRiBS-PIMC-master or similar)
