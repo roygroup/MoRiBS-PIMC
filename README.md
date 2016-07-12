@@ -1,54 +1,49 @@
-	MoRiBS-PIMC: Molecular Rotators in Bosonic Solvents with Path-Integral Monte Carlo
-	-----------------------------------------------------------------------------------
-	-----------------------------------------------------------------------------------
+#MoRiBS-PIMC: Molecular Rotators in Bosonic Solvents with Path-Integral Monte Carlo#
+-----------------------------------------------------------------------------------
 
-	* Disclaimer: We disclaim any and all warranties concerning the enclosed program. *
+*Disclaimer: We disclaim any and all warranties concerning the enclosed program.*
 
 The program MoRiBS-PIMC is mainly written by Tao (Toby) Zeng, Nicholas Blinov, Gregoire Guillon, Hui Li, and Pierre-Nicholas Roy at University of Alberta and University of Waterloo, Canada. If you encounter any problem with respect to compiling or running the program, please contact T. Zeng by email (tzeng@ualberta.ca or t2zeng@uwaterloo.ca).
 
-					************************
-					**    COMPILATION     **
-					************************
+##Compilation##
 
 Users should not change the directory structure after they unzip the distributed file. We label the main directory, where the source codes (*.cc, *.h, and *.f) are, as $MAIN. Please note that we have provided example configuration files like makefile with the distribution and one may just adjust the files according to the architecture of his/her computer. There is no need to create new configuration files. The compilation procedure of MoRiBS-PIMC contains the following steps:
 	
-	*****************************************************************************************************************************
-	NOTE: If you clone this repository using Github, you will need to have Git Large File Storage (https://git-lfs.github.com/)
-		installed in order to download some of the larger files associated with the examples/ directory. Github only permits
-		versionning for files less than 100MB in size. If you have git-lfs installed, when you clone the repository, all of
-		the example files will download properly.
-		
-		For Ubuntu, you can download the appropriate binary from https://github.com/github/git-lfs/releases and install using
-		the install.sh file. Please refer to https://git-lfs.github.com/ for full details for various operating systems.
-	*****************************************************************************************************************************
+*****************************************************************************************************************************
+###NOTE###
+If you clone this repository using Github, you will need to have Git Large File Storage (https://git-lfs.github.com/)
+installed in order to download some of the larger files associated with the examples/ directory. Github only permits
+versioning for files less than 100MB in size. If you have git-lfs installed, when you clone the repository, all of
+the example files will download properly.
 
-	1. Download and unpack the source code from the repository. This unpacked directory contains the source code and for future reference in this document,
-	   we will refer to this directory as $MAIN, where it is understood that $MAIN refers to the path of the directory (i.e. /home/user/MoRiBS-PIMC-master or similar)
-		• Note: The directory structure after unpacking is important and should not be modified by the user. There are appropriate configuration files
-		  included in the source code that may be changed slightly to accommodate different architectures.
-	2. The first configuration is required for Scalable Parallel Random Number Generator, SPRNG. Open $MAIN/sprng/make.CHOICES and specify the platform of 
-	   the computer by uncommenting the correct line (i.e. PLAT=LINUX)
-	3. Open $MAIN/sprng/SRC/make.$(PLAT) where $(PLAT) is the same platform specified in Step 2. In make.$(PLAT), specify the location of the Fortran and 
-	   C/C++ compilers for the com- puter by editing the lines beginning with F77= and CC= respectively. For example, for the standard compilers within Ubuntu, 
-	   one should specify F77 = /usr/bin/gfortran and CC = /usr/bin/gcc
-		• Note: Only the non-MPI compilation of SPRNG has been tested with MoRiBS-PIMC . 
-	4. Within the $MAIN/sprng/SRC directory, execute make clean and then make. If make finishes without error, SPRNG has been successfully compiled.
-		• Note: Ensure $MAIN/sprng/SRC/lib is empty before running make.
-	5. To compile the rest of MoRiBS-PIMC , navigate to the $MAIN/ directory and enter ./configure which should locate your C++ and Fortran compilers.
-		• Note: If you would like to use specific compilers, you can specify them via ./configure CXX=/usr/bin/g++ FC=/usr/bin/gfortran or similar.
-	6. Within the $MAIN directory, execute make clean and then make. If there are no error mes- sages, an executable file is generated called pimc in
-	   $MAIN and you have successfully compiled MoRiBS-PIMC .
-	7. In order to verify the installation, the user may run some of the examples included with the source code. From the $MAIN directory, execute the following commands:
-		• cd examples/MF 8He 0.37K 512 128/ • cp ../../pimc .
-		• ./pimc
-	If MoRiBS-PIMC was compiled correctly, the example should run without issue. The details regarding the input files are provided in the publication.
-		• Note: The files with the name yw001.* or permutation need to be deleted prior to running ./pimc. These files are generated by pimc but need to be 
-		  deleted and regenerated everytime pimc is executed.
+For Ubuntu, you can download the appropriate binary from https://github.com/github/git-lfs/releases and install using
+the install.sh file. Please refer to https://git-lfs.github.com/ for full details for various operating systems.
+*****************************************************************************************************************************
 
+1. Download and unpack the source code from the repository. This unpacked directory contains the source code and for future reference in this document,
+   we will refer to this directory as $MAIN, where it is understood that $MAIN refers to the path of the directory (i.e. /home/user/MoRiBS-PIMC-master or similar)
+	• Note: The directory structure after unpacking is important and should not be modified by the user. There are appropriate configuration files
+	  included in the source code that may be changed slightly to accommodate different architectures.
+2. The first configuration is required for Scalable Parallel Random Number Generator, SPRNG. Open $MAIN/sprng/make.CHOICES and specify the platform of 
+   the computer by uncommenting the correct line (i.e. PLAT=LINUX)
+3. Open $MAIN/sprng/SRC/make.$(PLAT) where $(PLAT) is the same platform specified in Step 2. In make.$(PLAT), specify the location of the Fortran and 
+   C/C++ compilers for the com- puter by editing the lines beginning with F77= and CC= respectively. For example, for the standard compilers within Ubuntu, 
+   one should specify F77 = /usr/bin/gfortran and CC = /usr/bin/gcc
+	• Note: Only the non-MPI compilation of SPRNG has been tested with MoRiBS-PIMC . 
+4. Within the $MAIN/sprng/SRC directory, execute make clean and then make. If make finishes without error, SPRNG has been successfully compiled.
+	• Note: Ensure $MAIN/sprng/SRC/lib is empty before running make.
+5. To compile the rest of MoRiBS-PIMC , navigate to the $MAIN/ directory and enter ./configure which should locate your C++ and Fortran compilers.
+	• Note: If you would like to use specific compilers, you can specify them via ./configure CXX=/usr/bin/g++ FC=/usr/bin/gfortran or similar.
+6. Within the $MAIN directory, execute make clean and then make. If there are no error mes- sages, an executable file is generated called pimc in
+   $MAIN and you have successfully compiled MoRiBS-PIMC .
+7. In order to verify the installation, the user may run some of the examples included with the source code. From the $MAIN directory, execute the following commands:
+	• cd examples/MF 8He 0.37K 512 128/ • cp ../../pimc .
+	• ./pimc
+If MoRiBS-PIMC was compiled correctly, the example should run without issue. The details regarding the input files are provided in the publication.
+	• Note: The files with the name yw001.* or permutation need to be deleted prior to running ./pimc. These files are generated by pimc but need to be 
+	  deleted and regenerated everytime pimc is executed.
 
-					************************
-					**   BEFORE RUNNING   **
-					************************
+##BEFORE RUNNING##
 
 For full information of running this program, please read our associated paper, whose reference will be posted once it is published. Given any problems at this time being, please contact tzeng@ualberta.ca.
 
@@ -61,6 +56,7 @@ Remember to use asymrho.x (in nmv_prop/), symrho.x (in symtop_prop/) or linden.x
 
 Users also need to prepare potential files for particle-particle and rotor-particle interactions. A particle-particle potential file should have the following format:
 
+```
 #  Aziz potential (aziz-2) (PRL 74 ,1568 (1995))
 #
 # (\AA)   V(r) (K)
@@ -75,6 +71,7 @@ Users also need to prepare potential files for particle-particle and rotor-parti
     29.8838    -1.42672e-05
     29.9419    -1.41017e-05
     30    -1.39384e-05
+```
 
 There can be as many comment lines starting with "#" before the first row of actual data, but not between the data lines.
 
