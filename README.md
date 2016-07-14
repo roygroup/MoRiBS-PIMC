@@ -11,13 +11,13 @@ Users should not change the directory structure after they unzip the distributed
 	
 *****************************************************************************************************************************
 ###NOTE###
-If you clone this repository using Github, you will need to have Git Large File Storage (https://git-lfs.github.com/)
+If you clone this repository using Github, you will need to have [Git Large File Storage](https://git-lfs.github.com/)
 installed in order to download some of the larger files associated with the examples/ directory. Github only permits
 versioning for files less than 100MB in size. If you have git-lfs installed, when you clone the repository, all of
 the example files will download properly.
 
-For Ubuntu, you can download the appropriate binary from https://github.com/github/git-lfs/releases and install using
-the install.sh file. Please refer to https://git-lfs.github.com/ for full details for various operating systems.
+For Ubuntu, you can download the appropriate binary from [https://github.com/github/git-lfs/releases](https://github.com/github/git-lfs/releases)
+and install using the ```install.sh``` file. Please refer to https://git-lfs.github.com/ for full details for various operating systems.
 *****************************************************************************************************************************
 
 1. Download and unpack the source code from the repository. This unpacked directory contains the source code and for future reference in this document,
@@ -30,11 +30,11 @@ the install.sh file. Please refer to https://git-lfs.github.com/ for full detail
    C/C++ compilers for the com- puter by editing the lines beginning with ```F77=``` and ```CC=``` respectively. For example, for the standard compilers within Ubuntu, 
    one should specify ```F77 = /usr/bin/gfortran``` and ```CC = /usr/bin/gcc```
 	• Note: Only the non-MPI compilation of SPRNG has been tested with MoRiBS-PIMC . 
-4. Within the $MAIN/sprng/SRC directory, execute make clean and then make. If make finishes without error, SPRNG has been successfully compiled.
+4. Within the ```$MAIN/sprng/SRC directory```, execute make clean and then make. If make finishes without error, SPRNG has been successfully compiled.
 	• Note: Ensure ```$MAIN/sprng/SRC/lib``` is empty before running make.
 5. To compile the rest of MoRiBS-PIMC , navigate to the $MAIN/ directory and enter ./configure which should locate your C++ and Fortran compilers.
 	• Note: If you would like to use specific compilers, you can specify them via ```./configure CXX=/usr/bin/g++``` ```FC=/usr/bin/gfortran``` or similar.
-6. Within the $MAIN directory, execute make clean and then make. If there are no error mes- sages, an executable file is generated called pimc in
+6. Within the ```$MAIN``` directory, execute make clean and then make. If there are no error mes- sages, an executable file is generated called pimc in
    $MAIN and you have successfully compiled MoRiBS-PIMC .
 7. In order to verify the installation, the user may run some of the examples included with the source code. From the $MAIN directory, execute the following commands:
 	• ```cd examples/MF 8He 0.37K 512 128/ • cp ../../pimc .```
@@ -48,11 +48,11 @@ If MoRiBS-PIMC was compiled correctly, the example should run without issue. The
 For full information of running this program, please read our associated paper, whose reference will be posted once it is published. Given any problems at this time being, please contact tzeng@ualberta.ca.
 
 Please note that one should delete the following files before each simulation run:
-	1: yw001.*;
-	2: permutation,
+	1: ```yw001.*```;
+	2: ```permutation```,
 Otherwise, the simulation will bomb out.
 
-Remember to use asymrho.x (in nmv_prop/), symrho.x (in symtop_prop/) or linden.x (in linear_prop/) to generate the needed files for PIMC sampling of asymmetric top, symmetric top, or linear rotors. Users should read the respective README files in those directories carefully before compiling and running those programs. Users should carefully name the resultant files in accordance to the rules explained in our CPC paper.
+Remember to use ```asymrho.x``` (in nmv_prop/), ```symrho.x``` (in symtop_prop/) or ```linden.x``` (in linear_prop/) to generate the needed files for PIMC sampling of asymmetric top, symmetric top, or linear rotors. Users should read the respective README files in those directories carefully before compiling and running those programs. Users should carefully name the resultant files in accordance to the rules explained in our CPC paper.
 
 Users also need to prepare potential files for particle-particle and rotor-particle interactions. A particle-particle potential file should have the following format:
 
@@ -148,27 +148,25 @@ The potentials should be arranged following
 			loop over azimuthal angle grid
 ```
 Six examples of input are provided in the examples/ directory. They are:
-	1. H2Odimer_0.74K_4096_2048: H2O dimer at T = 0.74 K with 4096 translational and 2048 rotational beads;
-	2. MF_1He_0.37K_512_128: Methyl Format and He at T = 0.37 K with 512 translational and 128 rotational beads;
-	3. MF_8He_0.37K_512_128: Similar to the previous example but with 8 He atoms;
-	4. N2O_5pH2_0.5K_512_128: N2O with 5 para-H2 at T = 0.5 K with 512 translational and 128 rotational beads;
-	5. SO2_1pH2_0.37K_1024_256: SO2 with 1 para-H2 at T = 0.37 K with 1024 translational and 256 rotational beads;
-	6. SO2_4pH2_0.37K_1024_256: Similar to the previous example but with 4 para-H2 molecules.
+	1. ```H2Odimer_0.74K_4096_2048```: H2O dimer at T = 0.74 K with 4096 translational and 2048 rotational beads;
+	2. ```MF_1He_0.37K_512_128```: Methyl Format and He at T = 0.37 K with 512 translational and 128 rotational beads;
+	3. ```MF_8He_0.37K_512_128```: Similar to the previous example but with 8 He atoms;
+	4. ```N2O_5pH2_0.5K_512_128```: N2O with 5 para-H2 at T = 0.5 K with 512 translational and 128 rotational beads;
+	5. ```SO2_1pH2_0.37K_1024_256```: SO2 with 1 para-H2 at T = 0.37 K with 1024 translational and 256 rotational beads;
+	6. ```SO2_4pH2_0.37K_1024_256```: Similar to the previous example but with 4 para-H2 molecules.
 
-One may compile the code, move the resultant executable ```pimc``` to examples/MF_8He_0.37K_512_128 or examples/N2O_5pH2_512_128, and try running the respective simulations. One may also look at the files in those two example directories to have a sense of how many files are needed and their formats. Some of these examples are discussed in our associated paper.
+One may compile the code, move the resultant executable ```pimc``` to ```examples/MF_8He_0.37K_512_128``` or ```examples/N2O_5pH2_512_128```, and try running the respective simulations. One may also look at the files in those two example directories to have a sense of how many files are needed and their formats. Some of these examples are discussed in our associated paper.
 
 ##OUTPUT SUMMARY##
 
 There are two relevant directories for a MoRiBS-PIMC run, the working directory and the output directory. The former is the directory where the program executable is and the latter is specified in qmc.input. In below we simply call the two directories ```$WORK``` and ```$OUTPUT```. And we also use ```$FILNAM``` to specify the ```FILENAMEPREFIX``` that is specified in ```qmc.input```.
 
-************
-   energy
-************
+###Energy###
 All energy outputs are stored in the following two files:
 
-	$OUTPUT/$FILNAM_sum.eng and $OUTPUT/$FILNAM.eng.
+	```$OUTPUT/$FILNAM_sum.eng and $OUTPUT/$FILNAM.eng```.
 
-The first contains the energy components averaged on the fly while the latter contains the block-averaged quantities for every block. In $OUTPUT/$FILNAM_sum.eng, column
+The first contains the energy components averaged on the fly while the latter contains the block-averaged quantities for every block. In ```$OUTPUT/$FILNAM_sum.eng```, column
 	1: counting indices of punching out the energy components;
 	2: translational kinetic energy;
 	3: potential energy;
@@ -182,7 +180,7 @@ The first contains the energy components averaged on the fly while the latter co
 
 All energy quantities have the unit of Kelvin (K) and the heat capacity has the unit of Kb, which is the Boltzmann constant. The CvX quantiites are not of interest for general users. Interested users can look at the SaveSumEnergy routine in mc_main.cc to figure out what they are. CvB should be equal to the pure translational heat capacity when the translational motion is not coupled to any potential. CvC should be equal to the pure rotational heat capacity when the rotational motion is not coupled to any potential.
 
-In $OUTPUT/$FILNAM.eng, column
+In ```$OUTPUT/$FILNAM.eng```, column
 	1: block index;
 	2: block averaged translational energy;
 	3: block averaged potential energy;
@@ -201,13 +199,11 @@ All energy quantities have the unit of K while CvE has the unit of K^2. The thre
 
 N is the total number of particles, including point-like particles and rotors, P the number of *translational* beads, and T the temperature in Kelvin. The resultant < Cv > has a unit of Kb, and its variance is obtained through error propagation.
 
-*******************
-   distribution
-*******************
+###Distribution###
 
-Whenever there are point-like particles, the $OUTPUT/$FILNAM_sum.gra contains pair radial distribution between point-like particles. The first column has radius and the second the rho(r). It follows the convention that integrating r from 0 to infinity rho(r)*dr gives 1. In practice, the density is made by binning in a finite grid, which is also normalized to 1.
+Whenever there are point-like particles, the ```$OUTPUT/$FILNAM_sum.gra``` contains pair radial distribution between point-like particles. The first column has radius and the second the rho(r). It follows the convention that integrating r from 0 to infinity rho(r)*dr gives 1. In practice, the density is made by binning in a finite grid, which is also normalized to 1.
 
-If there is a linear rotor, the $OUTPUT/$FILNAM_sum.g2d file contains the 2-D distribution of the point-like particles around the rotor. The 2 dimensions are radius and polar-angle. The file has three columns, where column
+If there is a linear rotor, the ```$OUTPUT/$FILNAM_sum.g2d``` file contains the 2-D distribution of the point-like particles around the rotor. The 2 dimensions are radius and polar-angle. The file has three columns, where column
 
 	1: polar angles in degree;
 	2: radius in Angstrom;
@@ -218,11 +214,11 @@ The density follows the following normalization:
 	Integrating from 0 to pi for theta and from 0 to infinity for r rho(r,theta)dr dtheta = 1.
 
 For a non-linear rotor, there are three files:
-
+```
 	$OUTPUT/$FILNAM_sum.gri;
 	$OUTPUT/$FILNAM_sum.grt;
 	$OUTPUT/$FILNAM_sum.grc
-
+```
 which contain the radial (r), polar angle (theta), and azimuthal angle (chi) distributions of the point-like particles in the molecu-fixed frame (MFF) of the rotor. The MFF is the same as the one used in the definition of Eular angles. The densities follow the following normalizations:
 
 	Integrating r from 0 to infinity rho(r) dr = number of point like particles;
@@ -231,9 +227,7 @@ which contain the radial (r), polar angle (theta), and azimuthal angle (chi) dis
 
 In addition, at the beginning of each block, the program punches out a $OUTPUT/$FILNAM###.xyz file to record the path configuration of the system. The file has N*P+2 lines, where N is the number of all particles (point-like + rotor) and P is the number of translational beads. Line one contains the permutational table for the configuration snapshot and line two is a comment line. The rest lines loop over all particles, point-like first and rotor second, and for each particle loop over all beads and punch out the corresponding configurations. Column 1 has the particle name, columns 2, 4, and 6 the x, y, and z coordinates in the space-fixed frame respectively, and columns 3, 5, 7 the phi, cos(theta), and chi angle coordinates. For linear rotors, phi and theta are the azimuthal and polar angles. For a top, phi, theta, and chi are the Eular angles defined in Figure 3.1, page 78 of Zare (Angular Momentum, 1988, John Wiley & Sons, Inc). When the number of rotational beads (Q) is a fraction of P, only the first Q lines of each particle block contains the meaningful angular coordinates.
 
-*******************
-   superfluidity
-*******************
+###Superfluidity###
 
 When bosons are involved, the program created a $OUTPUT/$FILNAM.sffs3d file to record the block-averaged classical moment of inertia of the bosons in the space-fixed frame (SFF) and the quantum deductions from area estimator. Readers should consult PRL, 1989, 63, 1601-1604 for more details of the area estimator. This estimator gives
 
@@ -247,9 +241,9 @@ where the subtrahend is the quantum deduction. In $OUTPUT/$FILNAM.sffs3d, column
 
 All quantities above have the unit of u*Angs^2. If the simulation is ergodic, the off-diagonal elements of the I^{cl} and the quantum deduction tensor should be averaged to zeros and making the SFF effective moment of inertia to be diagonal.
 
-If a top rotor is involved, then a $OUTPUT/$FILNAM.mffs3d file will be created. This file has the same format as the $OUTPUT/$FILNAM.sffs3d file but with the properties calculated along the molecule-fixed frame (MFF) axes. One can calculate the MFF effective moment of inertia using data in this file. Note that off-diagonal matrix element may occur since the MFF is usually anisotropic.
+If a top rotor is involved, then a ```$OUTPUT/$FILNAM.mffs3d``` file will be created. This file has the same format as the ```$OUTPUT/$FILNAM.sffs3d``` file but with the properties calculated along the molecule-fixed frame (MFF) axes. One can calculate the MFF effective moment of inertia using data in this file. Note that off-diagonal matrix element may occur since the MFF is usually anisotropic.
 
-If a linear rotor is involved, a $OUTPUT/$FILNAM.sup file will be created. It has the following content:
+If a linear rotor is involved, a ```$OUTPUT/$FILNAM.sup``` file will be created. It has the following content:
 	Column 1: block indices;
 	Column 2: block-averaged superfluid fraction perpendicular to the rotor axis;
 	Column 3: block-averaged superfluid fraction parallel to the rotor axis;
@@ -261,4 +255,4 @@ Note that averaged fraction of column 2 multiplied by the averaged moment of ine
 
 When one rotor is involved in the simulation, no matter it is a linear or a top, the program creates a $OUTPUT/$FILNAM_sum.rcf file, which records the averaged imaginary time orientational correlation function for the z-axis of the MFF. This function can be used to extract effective rotational constant of the effective rotor. Please refer to JCP, 2004, 120, 5916-5931 for details.
 
-Another superfluidity-relevant file is the $WORK/permutation.tab file. It records the permutation table of all the bosons from time to time and it can be used to calculate the probability of a boson being in a permutation cycle with a certain length.
+Another superfluidity-relevant file is the ```$WORK/permutation.tab``` file. It records the permutation table of all the bosons from time to time and it can be used to calculate the probability of a boson being in a permutation cycle with a certain length.
