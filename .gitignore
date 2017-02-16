@@ -1,0 +1,11 @@
+/config.log
+/config.status
+
+makefile
+
+/*.o
+/pimc
+
+/examples/*/yw001.*
+/examples/**/*.old
+/examples/*/*/1/
