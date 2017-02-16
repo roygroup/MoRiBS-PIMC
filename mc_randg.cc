@@ -64,6 +64,7 @@ void RandomIO(int tstatus, const char file_name[]) // check point for sprng stre
              int size = pack_sprng(STREAM[ip],&bytes); // pack  a stream state 
              fwrite(&size,1,sizeof(int),fp);           // store # of bytes  
              fwrite(bytes,1,size,fp);                  // store a stream state
+             free(bytes);
          }
          break;
      case IORead:
@@ -71,6 +72,7 @@ void RandomIO(int tstatus, const char file_name[]) // check point for sprng stre
          int size;
          for (int ip=0;ip<MAXGENS;ip++)
          {
+            free_sprng(STREAM[ip]);
             fread(&size,1,sizeof(int),fp);
             fread(buffer,1,size,fp);
             STREAM[ip] = unpack_sprng(buffer);
