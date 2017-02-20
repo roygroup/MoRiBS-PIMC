@@ -168,9 +168,9 @@ void MCMemFree(void)  //  free memory
    free_doubleMatrix(MCCosine); 
    free_doubleMatrix(MCAngles); 
 
-   delete MCType;
-   delete PIndex;
-   delete RIndex;
+   delete [] MCType;
+   delete [] PIndex;
+   delete [] RIndex;
 }
 
 //------------ MC SYSTEM OF UNITS --------------------------
