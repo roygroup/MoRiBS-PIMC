@@ -58,7 +58,7 @@ extern int    NumbRotLim; // limit of number of one type of rotors
 extern int NumbAtoms; // total number of atoms and molecules
 extern int NumbTypes; // Number of particles' types
 
-typedef struct TParticle
+struct TParticle
 {
    int    numb;                    // number of atoms/molecule of this type  
    double mass;                    // mass of atom/molecule
@@ -192,7 +192,7 @@ void MCMemFree(void);  // free memory
 
 //------------ MC SYSTEM OF UNITS --------------------------
 
-typedef struct TSystemOfUnits
+struct TSystemOfUnits
 {
    double mass;        
    double energy;       
