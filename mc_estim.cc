@@ -446,7 +446,7 @@ double GetPotEnergy_Diff(void)
             dr[id]  = (MCCoords[id][t0] - MCCoords[id][t1]);
 
             if (MINIMAGE)
-            dr[id] -= (BoxSize*rint(dr[id]/BoxSize));
+            dr[id] -= (BoxSize[id]*rint(dr[id]/BoxSize[id]));
 
             dr2    += (dr[id]*dr[id]);
          }
@@ -534,7 +534,7 @@ double GetPotEnergy_Densities(void)
             dr[id]  = (MCCoords[id][t0] - MCCoords[id][t1]);
 
             if (MINIMAGE)
-            dr[id] -= (BoxSize*rint(dr[id]/BoxSize));
+            dr[id] -= (BoxSize[id]*rint(dr[id]/BoxSize[id]));
 
             dr2    += (dr[id]*dr[id]);
          }
@@ -723,7 +723,7 @@ double GetPotEnergy(void)
             dr[id]  = (MCCoords[id][t0] - MCCoords[id][t1]);
 
             if (MINIMAGE)
-            dr[id] -= (BoxSize*rint(dr[id]/BoxSize));
+            dr[id] -= (BoxSize[id]*rint(dr[id]/BoxSize[id]));
 
             dr2    += (dr[id]*dr[id]);
          }
@@ -914,7 +914,7 @@ double GetKinEnergy(void)
              double dr = MCCoords[dim][t0] - MCCoords[dim][t1];
 
              if (MINIMAGE)
-             dr  -= (BoxSize*rint(dr/BoxSize));
+             dr  -= (BoxSize[dim]*rint(dr/BoxSize[dim]));
 
              sum += (dr*dr);
           }    
@@ -1337,7 +1337,9 @@ void SaveDensities1D(const char fname [], double acount)
 
   fid.open(fdens.c_str(),ios::out); io_setout(fid);
 
-  double volume = pow(BoxSize,(double)NDIM);     // 3D only  
+  double volume = 1.0;
+  for (int id=0;id<NDIM;id++)
+  volume *= BoxSize[id];
 
   double norm0  = 2.0*M_PI*_delta_radius*acount  // normalization factor for 
                 *(double)(NumbTimes)/volume;     // radial distribution functions 

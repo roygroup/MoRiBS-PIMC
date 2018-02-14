@@ -36,7 +36,7 @@ void RandomFree(void) // free memory used by sprng
 void RandomIO(int tstatus, const char file_name[]) // check point for sprng streams
 {
   const char *_proc_=__func__;    // "RandIO()";
-  char *fop="r";                  // file operation
+  const char *fop="r";            // file operation
 
   switch (tstatus)
   {
@@ -73,8 +73,10 @@ void RandomIO(int tstatus, const char file_name[]) // check point for sprng stre
          for (int ip=0;ip<MAXGENS;ip++)
          {
             free_sprng(STREAM[ip]);
-            fread(&size,1,sizeof(int),fp);
-            fread(buffer,1,size,fp);
+            if (fread(&size,1,sizeof(int),fp) != sizeof(int))
+            nrerror(_proc_,"Failed to read stream size");
+            if (fread(buffer,1,size,fp) != size)
+            nrerror(_proc_,"Failed to read stream data");
             STREAM[ip] = unpack_sprng(buffer);
          }
          break;

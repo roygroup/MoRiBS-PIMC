@@ -29,7 +29,7 @@ void MCWormMove(void);
 
 bool WorldLine(int, int);            
 
-typedef struct TPathWorm
+struct TPathWorm
 {
    char    stype[MAX_STRING_LENGTH]; // type of atoms/molecules
    int     type;                     // atoms type to apply the worm algorithm (He)
