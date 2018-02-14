@@ -13,6 +13,9 @@ bool    WORM     = false;      // use the worm algorithm
 
 bool    IMPURITY = false;    // set true if there is a molecule in the system
 bool    MINIMAGE = false;    // set true to apply minimum image convention 
+bool    CRYSTAL = false;     // set true to use crystal geometry
+bool    FCC = false;
+bool    HCP = false;
 
 int     IMTYPE   = -1;       // atom type for dopant molecule (rotational degrees of freedom)
 
@@ -40,7 +43,9 @@ int     NUMB_MOLCTYPES = 0;  // total number of molecules types
 int     NDIM;
 double  Temperature;
 double  Density;
-double  BoxSize;
+double *BoxSize;             // size of the entire box (in NDIM dimensions)
+double  UnitCell[3];         // size of a single crystal unit cell (containing 4 atoms)
+int     N1d[3];              // number of crystal unit cells in each dimension
 
 double  MCBeta;
 double  MCTau;      // imaginary time step 
@@ -129,6 +134,8 @@ void replInitial_config(double **);
 
 void MCMemAlloc(void)  // allocate  memmory 
 {
+   BoxSize   = new double [NDIM];
+
    MCCoords  = doubleMatrix (NDIM,NumbAtoms*NumbTimes);  
    newcoords = doubleMatrix (NDIM,NumbAtoms*NumbTimes); 
 
@@ -157,6 +164,8 @@ void MCMemAlloc(void)  // allocate  memmory
 
 void MCMemFree(void)  //  free memory
 {
+   delete [] BoxSize;
+
    free_doubleMatrix(MCCoords);  
    free_doubleMatrix(newcoords); 
 
@@ -330,10 +339,36 @@ void MCInit(void)  // only undimensional parameters in this function
    }
 // ------------------------------------------------------------
 
-// BoxSize  =  pow((double)NumbAtoms/Density,1.0/(double)NDIM); 
-// define a box size based on number of atoms only (molecules excluded)
-  
-   BoxSize  =  pow((double)(NUMB_ATOMS+NUMB_MOLCS)/Density,1.0/(double)NDIM);
+   // define a box size based on number of atoms and molecules
+   double volume = (double)(NUMB_ATOMS+NUMB_MOLCS)/Density;
+   if(CRYSTAL)
+   {
+      if(FCC)
+      {
+         UnitCell[0] = pow(volume/N1d[0]/N1d[1]/N1d[2], 1.0/NDIM);
+         UnitCell[1] = UnitCell[0];
+         UnitCell[2] = UnitCell[0];
+      }
+      else if(HCP)
+      {
+         UnitCell[0] = pow(volume/N1d[0]/N1d[1]/N1d[2]/sqrt(8.0), 1.0/NDIM);
+         UnitCell[1] = sqrt(3.0)*UnitCell[0];
+         UnitCell[2] = sqrt(8.0/3.0)*UnitCell[0];
+      }
+      cout<<"UnitCell: "<<UnitCell[0]<<" "<<UnitCell[1]<<" "<<UnitCell[2]<<endl;
+
+      for(int id=0;id<NDIM;id++)
+      BoxSize[id] = UnitCell[id]*N1d[id];
+   }
+   else
+   {
+      for (int id=0;id<NDIM;id++)
+      BoxSize[id] = pow(volume, 1.0/NDIM);
+   }
+   cout<<"BoxSize: "<<BoxSize[0];
+   for (int id=1;id<NDIM;id++)
+   cout<<" "<<BoxSize[id];
+   cout<<endl;
 
    MCBeta   =  1.0/Temperature;
    MCTau    =  MCBeta/(double)NumbTimes;
@@ -469,72 +504,164 @@ void initLattice_config(double **pos)
    else                       natoms += MCAtom[type].numb; 
 
 // ----- INITIAL CONFIGURATION FOR ATOMS ----------------------
-
-// box size per particle for atoms only: 
-   double abox = BoxSize/pow((double)natoms,1.0/(double)NDIM); 
+   double abox;
+   int ir[NDIM];
    double shift[NDIM];
 
-   for (int id=0;id<NDIM;id++)
-   shift[id] = 0.5*abox;  
-    
-   for (int type=0;type<NumbTypes;type++)   // count molecules only
+   if (CRYSTAL)
+   {
+      for (int id=0;id<NDIM;id++)
+      ir[id] = 0;
+   }
+   else
+   {
+      // box size per particle for atoms only:
+      abox = BoxSize[0]/pow((double)natoms,1.0/(double)NDIM);
+      for (int id=0;id<NDIM;id++)
+      shift[id] = 0.5*abox;
+   }
+
+   for (int type=0;type<NumbTypes;type++)   // count atoms only
    if (MCAtom[type].molecule == 0)
    {
-      int offset = MCAtom[type].offset;         
-      int maxnum = offset + MCAtom[type].numb*NumbTimes;         
-      
-      for (int atom=offset;atom<maxnum;atom+=NumbTimes)
-      {
-         for (int id=0;id<(NDIM-1);id++) 
-         if (shift[id] > BoxSize) 
-         {
-            shift[id]    = 0.5*abox; 
-            shift[id+1] += abox;
-         }
- 
-         for (int id=0;id<NDIM;id++)   // set the center of the box at the origin
-         pos[id][atom] = shift[id] - 0.5*BoxSize;
+      int offset = MCAtom[type].offset;
+      int maxnum = offset + MCAtom[type].numb*NumbTimes;
 
-         shift[0] += abox;
-      } 
+      if (CRYSTAL)
+      {
+         // Loop over unit cells.
+         for (int atom=offset;atom<maxnum;atom+=4*NumbTimes)
+         {
+            // First atom of unit cell.
+            for(int id=0;id<NDIM;id++)
+            pos[id][atom]=UnitCell[id]*(ir[id])-0.5*BoxSize[id];
+
+            if (FCC)
+            {
+               // Atoms are placed at:
+               //   * (0, 0, 0)
+               //   * (0, 1/2, 1/2)
+               //   * (1/2, 0, 1/2)
+               //   * (1/2, 1/2, 0)
+
+               // Next 3 atoms of unit cell.
+               for(int id=0;id<NDIM;id++)
+               for(int ia=0;ia<3;ia++)
+               {
+                  if (ia == id)
+                  pos[id][atom+(1+ia)*NumbTimes]=UnitCell[id]*(ir[id])-0.5*BoxSize[id];
+                  else
+                  pos[id][atom+(1+ia)*NumbTimes]=UnitCell[id]*(ir[id]+0.5)-0.5*BoxSize[id];
+               }
+            }
+            else if (HCP)
+            {
+               // Atoms are placed at:
+               //   * (0, 0, 0)
+               //   * (0, 2/3, 1/2)
+               //   * (1/2, 1/6, 1/2)
+               //   * (1/2, 1/2, 0)
+
+               // Next 3 atoms of unit cell.
+               for(int id=0;id<NDIM;id++)
+               for(int ia=0;ia<3;ia++)
+               {
+                  if (ia == id && ia == 1)
+                  pos[id][atom+(1+ia)*NumbTimes]=UnitCell[id]*(ir[id]+1.0/6.0)-0.5*BoxSize[id];
+                  else if (ia == id)
+                  pos[id][atom+(1+ia)*NumbTimes]=UnitCell[id]*(ir[id])-0.5*BoxSize[id];
+                  else if (ia == 0 && id == 1)
+                  pos[id][atom+(1+ia)*NumbTimes]=UnitCell[id]*(ir[id]+2.0/3.0)-0.5*BoxSize[id];
+                  else
+                  pos[id][atom+(1+ia)*NumbTimes]=UnitCell[id]*(ir[id]+0.5)-0.5*BoxSize[id];
+               }
+            }
+
+            // Move to next unit cell.
+            ir[0]++;
+            for (int id=0;id<(NDIM-1);id++)
+            if (ir[id] >= N1d[id])
+            {
+               ir[id] = 0;
+               ir[id+1]++;
+            }
+         }
+      }
+      else
+      {
+         // Loop over atoms.
+         for (int atom=offset;atom<maxnum;atom+=NumbTimes)
+         {
+            for (int id=0;id<NDIM;id++)   // set the center of the box at the origin
+            pos[id][atom] = shift[id] - 0.5*BoxSize[id];
+
+            // Move to next position.
+            shift[0] += abox;
+            for (int id=0;id<(NDIM-1);id++)
+            if (shift[id] > BoxSize[id])
+            {
+               shift[id]    = 0.5*abox;
+               shift[id+1] += abox;
+            }
+         }
+      }
    }
 
 // ----- INITIAL CONFIGURATION FOR MOLECULES -------------------
 
-// box size per particle for molecules only: 
+   double abox_mol[NDIM];
+   double molc_1d = pow((double)nmolcs,1.0/(double)NDIM);
 
-   abox = BoxSize/pow((double)nmolcs,1.0/(double)NDIM); 
-
-   cout<<"abox="<<abox<<" "<<BoxSize<<endl;
-  
+   // We aim for the same number of molecules in each direction, but because
+   // the box isn't necessarily cubic, they might be closer along some axis
+   // than another.
    for (int id=0;id<NDIM;id++)
-   shift[id] = 0.5*abox;  
-    
+   abox_mol[id] = BoxSize[id]/molc_1d;
+
+   cout<<"abox_mol: "<<abox_mol[0];
+   for (int id=1;id<NDIM;id++)
+   cout<<" "<<abox_mol[id];
+   cout<<endl;
+
+   for (int id=0;id<NDIM;id++)
+   shift[id] = 0.5*abox_mol[id];
+
    for (int type=0;type<NumbTypes;type++)   // count molecules only
-   if ((MCAtom[type].molecule == 1) || (MCAtom[type].molecule == 2) )
+   if ((MCAtom[type].molecule == 1) || (MCAtom[type].molecule == 2))
    {
-      int offset = MCAtom[type].offset;         
-      int maxnum = offset + MCAtom[type].numb*NumbTimes;         
-      
+      int offset = MCAtom[type].offset;
+      int maxnum = offset + MCAtom[type].numb*NumbTimes;
+
       for (int atom=offset;atom<maxnum;atom+=NumbTimes)
-      {  
-        for (int id=0;id<(NDIM-1);id++) 
-        if (shift[id] > BoxSize) {shift[id] = 0.5*abox; shift[id+1] += abox;}
- 
-        for (int id=0;id<NDIM;id++) // set the center of the box at the origin
-        {
-           pos[id][atom] = shift[id] - 0.5*BoxSize;
+      {
+         for (int id=0;id<(NDIM-1);id++)
+         if (shift[id] > BoxSize[id])
+         {
+            shift[id] = 0.5*abox_mol[id];
+            shift[id+1] += abox_mol[id+1];
+         }
 
-           if ((natoms == nmolcs))   // to avoid the overlap between particles
-           pos[id][atom] += BoxSize;
+         for (int id=0;id<NDIM;id++) // set the center of the box at the origin
+         {
+            pos[id][atom] = shift[id] - 0.5*BoxSize[id];
 
-           cout<<atom<<" "<<id<<" "<<pos[id][atom]<<endl;
+            if ((natoms == nmolcs))   // to avoid the overlap between particles
+            pos[id][atom] += BoxSize[id];
+         }
 
-        } 
- 
-        shift[0] += abox;
+        shift[0] += abox_mol[0];
       }  // END loop over atoms
-    }    // END loop over types
+   }     // END loop over types
+
+#ifdef INIT_LATTICE_TEST
+   for (int atom=0;atom<NumbAtoms;atom++)
+   {
+      cout<<pos[0][atom*NumbTimes];
+      for (int id=1;id<NDIM;id++)
+      cout<<" "<<pos[id][atom*NumbTimes];
+      cout<<endl;
+   }
+#endif
 }
 
 /*  no difference between atoms and molecules in the code below
@@ -544,9 +671,12 @@ void initLattice_config(double **pos, int nslices)
 // nslices = Number of time slices	
 {
    const char *_proc_ = __func__;    // "initLattice_config";
- 
-// box size per particle: 
-   double abox = BoxSize/pow((double)NumbAtoms,1.0/(double)NDIM); 
+
+   if (CRYSTAL)
+   nrerror (_proc_,"Crystal lattices not supported.");
+
+// box size per particle:
+   double abox = BoxSize[0]/pow((double)NumbAtoms,1.0/(double)NDIM);
    double shift[NDIM];
 
    for (int id=0;id<NDIM;id++)
@@ -557,10 +687,10 @@ void initLattice_config(double **pos, int nslices)
    for (int atom=0;atom<max;atom+=nslices)
    {  
        for (int id=0;id<(NDIM-1);id++) 
-       if (shift[id] > BoxSize) {shift[id] = 0.5*abox; shift[id+1] += abox;}
+       if (shift[id] > BoxSize[0]) {shift[id] = 0.5*abox; shift[id+1] += abox;}
  
        for (int id=0;id<NDIM;id++)   // set the center of the box at the origin
-       pos[id][atom] = shift[id] - 0.5*BoxSize;
+       pos[id][atom] = shift[id] - 0.5*BoxSize[0];
  
        shift[0] += abox;
    }

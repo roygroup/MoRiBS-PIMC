@@ -138,7 +138,7 @@ double qw_open_prob(int segm)
       double dr = MCCoords[id][pt0] - MCCoords[id][pt1];
 
       if (MINIMAGE)
-      dr  -= (BoxSize*rint(dr/BoxSize));
+      dr  -= (BoxSize[id]*rint(dr/BoxSize[id]));
 
       kin += (dr*dr); 
    }
@@ -211,7 +211,7 @@ void  qworm_close  (void)
       double dr = MCCoords[id][pt0] - MCCoords[id][pt1];
  
       if (MINIMAGE)
-      dr  -= (BoxSize*rint(dr/BoxSize));
+      dr  -= (BoxSize[id]*rint(dr/BoxSize[id]));
 
       kin += (dr*dr); 
    }
@@ -612,7 +612,7 @@ int get_ptable(int atomw, int pt0, int pt1, int segm, int t1)
            double dx = MCCoords[id][itw] - MCCoords[id][it1];  // exchange
 
            if (MINIMAGE)
-           dx  -= (BoxSize*rint(dx/BoxSize));
+           dx  -= (BoxSize[id]*rint(dx/BoxSize[id]));
 
            dr2 += (dx*dx);
         }

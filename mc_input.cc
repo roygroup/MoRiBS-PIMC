@@ -48,6 +48,9 @@ const char IO_ROTDENSI[]       = "ROTDENSI";
 
 const char IO_WORM[]           = "WORM";
 const char IO_MINIMAGE[]       = "MINIMAGE";
+const char IO_CRYSTAL[]        = "CRYSTAL";
+const char IO_FCC[]            = "FCC";
+const char IO_HCP[]            = "HCP";
 
 const char IO_MCSKIP_RATIO[]   = "MCSKIP_RATIO";
 const char IO_MCSKIP_TOTAL[]   = "MCSKIP_TOTAL"; 
@@ -84,6 +87,7 @@ void IOReadParams(const char in_file[],int & mc_status)
    IMPURITY = false;
    WORM     = false;
    MINIMAGE = false;
+   CRYSTAL  = false;
 
    ROTATION = false;
 
@@ -101,6 +105,7 @@ void IOReadParams(const char in_file[],int & mc_status)
    double  _rot_step;      // step for sampling the rotational degrees of freedom
    string _srot_type;      // the molecule type to sample the rotational degrees of freedom
    string _srot_dens;      // the file name with the rotational density matrix
+   string crytype;         // type of crystal (FCC or HCP)
 
    InitMCCoords = 0;
 
@@ -295,6 +300,23 @@ void IOReadParams(const char in_file[],int & mc_status)
         MINIMAGE = true;
      }
      else
+     if (params==IO_CRYSTAL)
+     {
+        CRYSTAL = true;
+        if (NDIM != 3)
+        nrerror(_proc_,"Crystal must be in 3 dimensions");
+        inf >> crytype;
+        if (crytype==IO_FCC)
+           FCC = 1;
+        else if (crytype==IO_HCP)
+           HCP = 1;
+        else
+           nrerror(_proc_,"Unknown crystal type");
+        inf >> N1d[0] >> N1d[1] >> N1d[2];
+        if (NUMB_ATOMS != (N1d[0]*N1d[1]*N1d[2]*4))
+        nrerror(_proc_,"NUMB_ATOMS = N1d1*N1d2*N1d3*4 with CRYSTAL");
+     }
+     else
      if (params==IO_READMCCOORDS)
      {
         InitMCCoords = 1;
@@ -442,6 +464,12 @@ void IOReadParams(const char in_file[],int & mc_status)
    nrerror(_proc_,"ISPHER = 1 is not compatible with ROTATION");
 
    cout << "NONLINEAR DOPANT SPHERICAL TREATMENT: "<<ISPHER<<endl;
+
+   if(CRYSTAL)
+   {
+      cout<<"Crystal type: "<<crytype<<endl;
+      cout<<"Number of unit cells along each side: "<<N1d[0]<<" "<<N1d[1]<<" "<<N1d[2]<<endl;
+   }
 
    cout << "Number of Slices = " << NumbTimes << endl;
    cout << "Number of Passes = " << NumberOfMCPasses << endl;

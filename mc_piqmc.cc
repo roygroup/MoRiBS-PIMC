@@ -1237,7 +1237,7 @@ double PotEnergy(int atom0, double **pos)
              dr[id]  = (pos[id][t0] - MCCoords[id][t1]);
             
              if (MINIMAGE)
-             dr[id] -= (BoxSize*rint(dr[id]/BoxSize));
+             dr[id] -= (BoxSize[id]*rint(dr[id]/BoxSize[id]));
 
              dr2    += (dr[id]*dr[id]);
           }
@@ -1830,7 +1830,7 @@ double PotEnergy(int atom0, double **pos, int it)
            dr[id]  = (pos[id][t0] - MCCoords[id][t1]);
 
            if (MINIMAGE)
-           dr[id] -= (BoxSize*rint(dr[id]/BoxSize));
+           dr[id] -= (BoxSize[id]*rint(dr[id]/BoxSize[id]));
  
            dr2    += (dr[id]*dr[id]);
         }
@@ -2013,7 +2013,7 @@ double PotRotEnergy(int atom0,double ** cosine,int it)
             if (MINIMAGE)
             {
             cout << "MIN IMAGE for orient pot" << endl; exit(0);
-            dr[id] -= (BoxSize*rint(dr[id]/BoxSize));
+            dr[id] -= (BoxSize[id]*rint(dr[id]/BoxSize[id]));
             }
  
             dr2    += (dr[id]*dr[id]);
